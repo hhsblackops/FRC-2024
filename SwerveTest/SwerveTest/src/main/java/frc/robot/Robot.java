@@ -7,17 +7,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj.XboxController;
 import com.kauailabs.navx.frc.AHRS;
-
-
-
-
-
-
-
-
+import java.util.ArrayList;
 
 public class Robot extends TimedRobot {
   
+  //ArrayList<Movement> Steps = new ArrayList<Movement>();
   XboxController DriveController = new XboxController(0);
   DriveSystem Drive = new DriveSystem();
   AHRS GyroSensor = new AHRS();
@@ -26,9 +20,12 @@ public class Robot extends TimedRobot {
     GyroSensor.reset();
   }
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic()
+  {
 
-  Drive.Execute(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), DriveController.getRightBumper(), GyroSensor.getAngle());
+    Drive.Execute(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), DriveController.getRightBumper(), GyroSensor.getAngle());
 
+    //Movement step = new Movement(10.0,20.0,30.0,40.0);   
+    //Steps.add(step);
   }
 }
