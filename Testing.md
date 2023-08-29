@@ -1,3 +1,0 @@
-# Something
-
-* New from jake
