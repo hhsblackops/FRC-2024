@@ -12,10 +12,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 
 
-
-
-
-
 public class Robot extends TimedRobot {
   
   XboxController DriveController = new XboxController(0);
@@ -27,8 +23,10 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void teleopPeriodic() {
-
-  Drive.Execute(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), DriveController.getRightBumper(), GyroSensor.getAngle());
-
+    if(DriveController.getRightBumper()){
+      Drive.Lock();
+    }else{
+    Drive.Execute(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), GyroSensor.getAngle());
+    }
   }
 }

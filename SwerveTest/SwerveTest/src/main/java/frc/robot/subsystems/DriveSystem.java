@@ -25,8 +25,14 @@ public class DriveSystem{
   public double NegFullX;
   public double NegFullY;
 
+  public void Lock(){
+    FrontRight.Run(0, Math.toRadians(45));
+    BackRight.Run(0, Math.toRadians(-45));
+    BackLeft.Run(0, Math.toRadians(45));
+    FrontLeft.Run(0, Math.toRadians(-45));
+  }
 
-  public void Execute(double x1, double y1, double x2, boolean XTrigger, double Gyro){
+  public void Execute(double x1, double y1, double x2, double Gyro){
     StrafeDirection = Math.atan2(x1, y1) - Math.toRadians(Gyro);
     StrafeMagnitude = Math.hypot(x1, y1) * DriveConstants.StrafePercent;
     StrafeX = Math.sin(StrafeDirection) * StrafeMagnitude;
@@ -37,16 +43,14 @@ public class DriveSystem{
     PosFullY = StrafeY + RotateY;
     NegFullX = StrafeX - RotateX;
     NegFullY = StrafeY - RotateY;
-    if(XTrigger){
-      FrontRight.Run(0, Math.toRadians(45));
-      BackRight.Run(0, Math.toRadians(-45));
-      BackLeft.Run(0, Math.toRadians(45));
-      FrontLeft.Run(0, Math.toRadians(-45));
-    }else{
-      FrontRight.Run(Math.hypot(PosFullX, NegFullY), Math.atan2(PosFullX, NegFullY));
-      BackRight.Run(Math.hypot(NegFullX, NegFullY), Math.atan2(NegFullX, NegFullY));
-      BackLeft.Run(Math.hypot(NegFullX, PosFullY), Math.atan2(NegFullX, PosFullY));
-      FrontLeft.Run(Math.hypot(PosFullX, PosFullY), Math.atan2(PosFullX, PosFullY));
-    }
+
+
+    FrontRight.Run(Math.hypot(PosFullX, NegFullY), Math.atan2(PosFullX, NegFullY));
+    BackRight.Run(Math.hypot(NegFullX, NegFullY), Math.atan2(NegFullX, NegFullY));
+    BackLeft.Run(Math.hypot(NegFullX, PosFullY), Math.atan2(NegFullX, PosFullY));
+    FrontLeft.Run(Math.hypot(PosFullX, PosFullY), Math.atan2(PosFullX, PosFullY));
+    
   }
+
+
 }

@@ -10,8 +10,8 @@ public final class Constants {
 
     //This is how fast your robot will go forward and rotate.
     //THESE 2 VALUES COMBINED CAN NOT BE BIGGER THEN 1!!
-    public static final double StrafePercent = 0.1;
-    public static final double RotatePercent = 0.05;
+    public static final double StrafePercent = 0.5;
+    public static final double RotatePercent = 0.5;
 
     
     //From center of one wheel to the other, front to back
