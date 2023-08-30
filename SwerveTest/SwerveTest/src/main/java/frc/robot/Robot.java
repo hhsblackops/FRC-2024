@@ -14,6 +14,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class Robot extends TimedRobot {
   
+  //ArrayList<Movement> Steps = new ArrayList<Movement>();
   XboxController DriveController = new XboxController(0);
   DriveSystem Drive = new DriveSystem();
   AHRS GyroSensor = new AHRS();
