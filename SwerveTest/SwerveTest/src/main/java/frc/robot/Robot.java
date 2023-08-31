@@ -29,5 +29,6 @@ public class Robot extends TimedRobot {
     }else{
     Drive.Execute(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), GyroSensor.getAngle());
     }
+    System.out.println(Drive.Test());
   }
 }

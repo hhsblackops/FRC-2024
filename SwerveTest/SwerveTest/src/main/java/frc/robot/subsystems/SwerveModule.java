@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 public class SwerveModule {
@@ -17,6 +18,7 @@ public class SwerveModule {
     private CANSparkMax TurningSpark;
     private SparkMaxPIDController TurningPIDController;
     private AbsoluteEncoder TurningEncoder;
+    private RelativeEncoder MovingEncoder;
     private double SetPosition;
     private double AngleOffset;
     private double WantedPosition;
@@ -26,7 +28,10 @@ public class SwerveModule {
         MovingSpark = new CANSparkMax(MovingID, MotorType.kBrushless);
         MovingSpark.restoreFactoryDefaults();
         MovingSpark.setSmartCurrentLimit(40);
+        MovingEncoder = MovingSpark.getEncoder();
+        MovingEncoder.setPositionConversionFactor(2 * Math.PI);
         MovingSpark.burnFlash();
+        MovingEncoder.setPosition(0);
 
         TurningSpark = new CANSparkMax(TurningID, MotorType.kBrushless);
         TurningSpark.restoreFactoryDefaults();
@@ -73,5 +78,13 @@ public class SwerveModule {
         TurningPIDController.setReference((SetPosition + AngleOffset) * -1, CANSparkMax.ControlType.kPosition);
         MovingSpark.set(speed * IsReversed);
         
+    }
+
+
+    public double WheelDirection(){
+        return(TurningEncoder.getPosition() * -1);
+    }
+    public double Magnitude(){
+        return(MovingEncoder.getPosition() * -1);
     }
 }

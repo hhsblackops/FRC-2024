@@ -13,6 +13,7 @@ public class DriveSystem{
   public final SwerveModule BackLeft = new SwerveModule(5, 6, Math.toRadians(180));
   public final SwerveModule FrontLeft = new SwerveModule(1, 2, Math.toRadians(90));
 
+
   public double StrafeDirection;
   public double StrafeMagnitude;
 
@@ -52,5 +53,8 @@ public class DriveSystem{
     
   }
 
+  public double Test(){
+    return(BackRight.WheelSpeed());
+  }
 
 }
