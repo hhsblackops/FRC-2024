@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -82,9 +78,11 @@ public class SwerveModule {
 
 
     public double WheelDirection(){
-        return(TurningEncoder.getPosition() * -1);
+        return((TurningEncoder.getPosition() * -1) - AngleOffset);
     }
-    public double Magnitude(){
-        return(MovingEncoder.getPosition() * -1);
+    public double WheelPosition(){
+        return(MovingEncoder.getPosition());
     }
+
+
 }

@@ -18,17 +18,23 @@ public class Robot extends TimedRobot {
   XboxController DriveController = new XboxController(0);
   DriveSystem Drive = new DriveSystem();
   AHRS GyroSensor = new AHRS();
+  public double GyroAngle = GyroSensor.getAngle();
+
   @Override
   public void teleopInit() {
     GyroSensor.reset();
   }
   @Override
   public void teleopPeriodic() {
+    if(DriveController.getAButton()){
+      GyroSensor.reset();
+    }
     if(DriveController.getRightBumper()){
       Drive.Lock();
     }else{
-    Drive.Execute(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), GyroSensor.getAngle());
+      Drive.Drive(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), GyroAngle);
     }
-    System.out.println(Drive.Test());
+    //System.out.println(Drive.RobotX(GyroAngle) + ", " + Drive.RobotY(GyroAngle));
+    System.out.println(GyroAngle);
   }
 }
