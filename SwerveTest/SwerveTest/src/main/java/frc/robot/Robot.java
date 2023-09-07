@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj.XboxController;
 import com.kauailabs.navx.frc.AHRS;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -18,7 +18,7 @@ public class Robot extends TimedRobot {
   XboxController DriveController = new XboxController(0);
   DriveSystem Drive = new DriveSystem();
   AHRS GyroSensor = new AHRS();
-  public double GyroAngle = GyroSensor.getAngle();
+  
 
   @Override
   public void teleopInit() {
@@ -32,9 +32,10 @@ public class Robot extends TimedRobot {
     if(DriveController.getRightBumper()){
       Drive.Lock();
     }else{
-      Drive.Drive(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), GyroAngle);
+      Drive.Drive(DriveController.getLeftX(), -DriveController.getLeftY(), DriveController.getRightX(), GyroSensor.getAngle());
     }
-    //System.out.println(Drive.RobotX(GyroAngle) + ", " + Drive.RobotY(GyroAngle));
-    System.out.println(GyroAngle);
+    double [] RobotPosition = Drive.RobotPosition(GyroSensor.getAngle());
+    SmartDashboard.putNumber("X Position", RobotPosition[0]);
+    SmartDashboard.putNumber("Y Position", RobotPosition[1]);
   }
 }

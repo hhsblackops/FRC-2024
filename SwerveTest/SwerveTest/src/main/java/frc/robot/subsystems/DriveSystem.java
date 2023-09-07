@@ -26,13 +26,6 @@ public class DriveSystem{
   public double NegFullX;
   public double NegFullY;
 
-
-  public double RobotXPosition = 0;
-  public double RobotYPosition = 0;
-  public double XPastPosition = 0;
-  public double YPastPosition = 0;
-  public double YPosition = 0;
-
   public void Lock(){
     FrontRight.Run(0, Math.toRadians(45));
     BackRight.Run(0, Math.toRadians(-45));
@@ -60,23 +53,22 @@ public class DriveSystem{
     
   }
 
-  public double RobotX(double Gyro){
-    double CurrentPosition = FrontRight.WheelPosition();
-    double PositionChange = CurrentPosition - XPastPosition;
-    double WheelPosition = FrontRight.WheelDirection() - Math.toRadians(Gyro);
-    RobotXPosition += Math.sin(WheelPosition) * PositionChange;
-    XPastPosition = CurrentPosition;
-    
-    return(RobotXPosition);
-  }
-
-  public double RobotY(double Gyro){
-    double CurrentPosition = FrontRight.WheelPosition();
-    double PositionChange = CurrentPosition - YPastPosition;
-    double WheelPosition = FrontRight.WheelDirection() - Math.toRadians(Gyro);
-    RobotYPosition += Math.cos(WheelPosition) * PositionChange;
-    YPastPosition = CurrentPosition;
-    return(RobotYPosition);
+  public double[] RobotPosition(double Gyro){
+    //This gets the position of the robot and returns it as an array with the x and y value
+    double[] FrontRightPosition = FrontRight.ModulePosition(Gyro);
+    double[] FrontLeftPosition = FrontLeft.ModulePosition(Gyro);
+    double[] BackRightPosition = BackRight.ModulePosition(Gyro);
+    double[] BackLeftPosition = BackLeft.ModulePosition(Gyro);
+    double RobotXPosition = (FrontRightPosition[0] + 
+    FrontLeftPosition[0] +
+    BackLeftPosition[0] +
+    BackRightPosition[0]) / 4;
+    double RobotYPosition = (FrontRightPosition[1] +
+    FrontLeftPosition[1] +
+    BackLeftPosition[1] +
+    BackRightPosition[1]) / 4;
+    double[] FullPosition = {RobotXPosition, RobotYPosition};
+    return(FullPosition);
   }
 
 

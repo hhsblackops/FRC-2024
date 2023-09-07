@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 public class SwerveModule {
+    
     private CANSparkMax MovingSpark;
 
     private CANSparkMax TurningSpark;
@@ -17,9 +18,8 @@ public class SwerveModule {
     private RelativeEncoder MovingEncoder;
     private double SetPosition;
     private double AngleOffset;
-    private double WantedPosition;
-    private double CurrentPosition;
-    private double IsReversed;
+
+
     public SwerveModule(int TurningID, int MovingID, double Offset){
         MovingSpark = new CANSparkMax(MovingID, MotorType.kBrushless);
         MovingSpark.restoreFactoryDefaults();
@@ -50,16 +50,30 @@ public class SwerveModule {
         TurningSpark.setSmartCurrentLimit(20);
         TurningSpark.burnFlash();
         AngleOffset = Offset;
+
         
 
     }
+
+    public double TurningPosition(){
+        return((TurningEncoder.getPosition() * -1) - AngleOffset);
+    }
+    public double DrivingPosition(){
+        return(MovingEncoder.getPosition());
+    }
+
+
+    private double WantedPosition;
+    private double CurrentPosition;
+    private double IsReversed;
+
     public void Run(double speed, double angle){
         /* This next series of if statements is to reverse the motor if 
          * it is closer to switch direction and reverse the motor.
          */
 
         WantedPosition = Math.IEEEremainder(angle, 2 * Math.PI);
-        CurrentPosition = Math.IEEEremainder((TurningEncoder.getPosition() * -1) - AngleOffset, 2 * Math.PI);
+        CurrentPosition = Math.IEEEremainder(TurningPosition(), 2 * Math.PI);
         if((Math.abs(CurrentPosition - WantedPosition) < Math.PI / 2) ||
         (Math.abs(CurrentPosition - WantedPosition) > 3 * Math.PI / 2)){
             IsReversed = 1;
@@ -69,20 +83,22 @@ public class SwerveModule {
             SetPosition = WantedPosition + Math.PI;
         }
 
-
-
         TurningPIDController.setReference((SetPosition + AngleOffset) * -1, CANSparkMax.ControlType.kPosition);
         MovingSpark.set(speed * IsReversed);
         
     }
 
 
-    public double WheelDirection(){
-        return((TurningEncoder.getPosition() * -1) - AngleOffset);
-    }
-    public double WheelPosition(){
-        return(MovingEncoder.getPosition());
-    }
+    private double[] ModuleCoords = {0, 0};
+    private double PastPosition = 0;
 
-
+    public double[] ModulePosition(double Gyro){
+        double CurrentPosition = DrivingPosition();
+        double PositionChange = CurrentPosition - PastPosition;
+        double ModuleDirection = TurningPosition() - Math.toRadians(Gyro);
+        ModuleCoords[0] += Math.sin(ModuleDirection) * PositionChange; //Change in X value
+        ModuleCoords[1] += Math.cos(ModuleDirection) * PositionChange; //Change in Y value
+        PastPosition = CurrentPosition;
+        return(ModuleCoords);
+    }
 }
