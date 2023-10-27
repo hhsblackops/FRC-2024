@@ -18,5 +18,10 @@ public final class Constants {
     //Also from center of wheel to the other, left to right
     public static final double RobotWidth = 26.2; //inches
     public static final double TurnAngle = Math.atan(RobotWidth/RobotLength); //Is in radians
+
+    /* This is the number that will be counted as "rotations" in the driving wheel.
+    We chose this number because it is how many motor rotations will make the robot go foward 
+    approximately 1 foot*/
+    public static final double DrivingPositionFactor = (3 * Math.PI) / (4.71 * 12);
   }
 }

@@ -3,6 +3,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+
+import frc.robot.Constants.DriveConstants;
+
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -25,7 +28,7 @@ public class SwerveModule {
         MovingSpark.restoreFactoryDefaults();
         MovingSpark.setSmartCurrentLimit(40);
         MovingEncoder = MovingSpark.getEncoder();
-        MovingEncoder.setPositionConversionFactor(2 * Math.PI);
+        MovingEncoder.setPositionConversionFactor(DriveConstants.DrivingPositionFactor);
         MovingSpark.burnFlash();
         MovingEncoder.setPosition(0);
 
@@ -54,6 +57,7 @@ public class SwerveModule {
         
 
     }
+
 
     public double TurningPosition(){
         return((TurningEncoder.getPosition() * -1) - AngleOffset);
@@ -100,5 +104,10 @@ public class SwerveModule {
         ModuleCoords[1] += Math.cos(ModuleDirection) * PositionChange; //Change in Y value
         PastPosition = CurrentPosition;
         return(ModuleCoords);
+    }
+
+    public void ResetModulePosition(){
+        ModuleCoords[0] = 0;
+        ModuleCoords[1] = 0;
     }
 }
