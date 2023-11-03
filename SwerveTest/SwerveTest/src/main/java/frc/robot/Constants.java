@@ -9,19 +9,30 @@ public final class Constants {
   public static class DriveConstants {
     //This is how fast your robot will go forward and rotate.
     //THESE 2 VALUES COMBINED CAN NOT BE BIGGER THEN 1!!
-    public static final double StrafePercent = 0.1;
-    public static final double RotatePercent = 0.1;
+    public static final double MaxStrafeSpeed = 1; //feet per second
+    public static final double MaxRotateSpeed = 0.01; //radians per second
 
-    //From center of one wheel to the other, front to back
-    public static final double RobotLength = 26.2; //inches
+    //The unit of measurement for the next 2 lines doesn't matter, as long as they're both the same.
+    public static final double RobotLength = 24; //inches
+    public static final double RobotWidth = 24.5; //inches
 
-    //Also from center of wheel to the other, left to right
-    public static final double RobotWidth = 26.2; //inches
-    public static final double TurnAngle = Math.atan(RobotWidth/RobotLength); //Is in radians
+    /*if your robot isn't a perfect square, the best angle to turn the robot is not exactly
+    every wheel at 45 degrees. This next line calculates it for you.*/
+    public static final double TurnAngle = Math.atan(RobotWidth/RobotLength);
 
     /* This is the number that will be counted as "rotations" in the driving wheel.
     We chose this number because it is how many motor rotations will make the robot go foward 
-    approximately 1 foot*/
-    public static final double DrivingPositionFactor = (3 * Math.PI) / (4.71 * 12);
+    approximately 1 foot.*/
+    public static final double PinionTeethNumber = 14;
+    public static final double MotorToWheelGearRatio = (45.0 * 22) / (PinionTeethNumber * 15);
+    public static final double WheelDiameter = 0.25; //feet
+    public static final double DrivingPositionFactor = ((WheelDiameter * Math.PI) / MotorToWheelGearRatio);
+
+    public static final double DrivingVelocityFactor = ((WheelDiameter * Math.PI) / MotorToWheelGearRatio) / 60;
+  }
+
+
+  public static class AutoConstants {
+
   }
 }

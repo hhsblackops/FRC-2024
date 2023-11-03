@@ -5,6 +5,8 @@ import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;;
+
 
 
 public class DriveSubsystem extends SubsystemBase{
@@ -22,20 +24,9 @@ public class DriveSubsystem extends SubsystemBase{
   
   AHRS GyroSensor = new AHRS();
 
-  public double StrafeDirection;
-  public double StrafeMagnitude;
-
-  public double StrafeX;
-  public double StrafeY;
-  public double RotateX;
-  public double RotateY;
-  public double PosFullX;
-  public double PosFullY;
-  public double NegFullX;
-  public double NegFullY;
 
 
-  public double GetGyro(){
+  public double GetGyroDegrees(){
     return(GyroSensor.getAngle());
   }
 
@@ -51,31 +42,49 @@ public class DriveSubsystem extends SubsystemBase{
   }
 
   public void Drive(double x1, double y1, double x2){
-    StrafeDirection = Math.atan2(x1, y1) - Math.toRadians(GyroSensor.getAngle());
-    StrafeMagnitude = Math.hypot(x1, y1);
-    StrafeMagnitude = Math.min(StrafeMagnitude, 1) * DriveConstants.StrafePercent;
-    //The line above is to make sure that the Magnitude isn't greater then 1
-    StrafeX = Math.sin(StrafeDirection) * StrafeMagnitude;
-    StrafeY = Math.cos(StrafeDirection) * StrafeMagnitude;
+    double ControllerStarfeX = Math.min(x1, 1);
+    double ControllerStrafeY = Math.min(y1, 1);
+    double ControllerRotate = Math.min(x2, 1);
+    double StrafeDirection = Math.atan2(ControllerStarfeX, ControllerStrafeY) - Math.toRadians(GyroSensor.getAngle());
+    double StrafeMagnitude = Math.hypot(ControllerStarfeX, ControllerStrafeY) * DriveConstants.MaxStrafeSpeed;
+    double StrafeX = Math.sin(StrafeDirection) * StrafeMagnitude;
+    double StrafeY = Math.cos(StrafeDirection) * StrafeMagnitude;
     
-    RotateX = Math.cos(DriveConstants.TurnAngle) * Math.min(x2, 1) * DriveConstants.RotatePercent;
-    RotateY = Math.sin(DriveConstants.TurnAngle) * Math.min(x2, 1) * DriveConstants.RotatePercent;
-    PosFullX = StrafeX + RotateX;
-    PosFullY = StrafeY + RotateY;
-    NegFullX = StrafeX - RotateX;
-    NegFullY = StrafeY - RotateY;
+    double RotateX = Math.cos(DriveConstants.TurnAngle) * ControllerRotate * ((Math.hypot(DriveConstants.RobotLength, DriveConstants.RobotWidth) / 2 ) * DriveConstants.MaxRotateSpeed);
+    double RotateY = Math.sin(DriveConstants.TurnAngle) * ControllerRotate * ((Math.hypot(DriveConstants.RobotLength, DriveConstants.RobotWidth) / 2 ) * DriveConstants.MaxRotateSpeed);
+    double PosFullX = StrafeX + RotateX;
+    double PosFullY = StrafeY + RotateY;
+    double NegFullX = StrafeX - RotateX;
+    double NegFullY = StrafeY - RotateY;
 
 
-    FrontRight.Run(Math.hypot(PosFullX, NegFullY), Math.atan2(PosFullX, NegFullY));
+
+    /*FrontRight.Run(Math.hypot(PosFullX, NegFullY), Math.atan2(PosFullX, NegFullY));
     BackRight.Run(Math.hypot(NegFullX, NegFullY), Math.atan2(NegFullX, NegFullY));
     BackLeft.Run(Math.hypot(NegFullX, PosFullY), Math.atan2(NegFullX, PosFullY));
     FrontLeft.Run(Math.hypot(PosFullX, PosFullY), Math.atan2(PosFullX, PosFullY));
+    */
+    double Direction = Math.toRadians(0);
+    double Speed = 1;
+    FrontRight.Run(Speed, Direction);
+    BackRight.Run(Speed, Direction);
+    BackLeft.Run(Speed, Direction);
+    FrontLeft.Run(Speed, Direction);
+
+    double kP = SmartDashboard.getNumber("kP", 0);
+    double kF = SmartDashboard.getNumber("kF", 0);
+
+    FrontRight.PIDTuning(kP, kF);
+    FrontLeft.PIDTuning(kP, kF);
+    BackRight.PIDTuning(kP, kF);
+    BackLeft.PIDTuning(kP, kF);
     
   }
 
-  public double[] FullPosition = {0,0};
+  public double[] FullPosition = {0,0,0};
   public double RobotYPosition = 0;
   public double RobotXPosition = 0;
+  public double RobotVelocity = 0;
 
   @Override
   public void periodic(){
@@ -89,16 +98,27 @@ public class DriveSubsystem extends SubsystemBase{
     FrontLeftPosition[0] +
     BackLeftPosition[0] +
     BackRightPosition[0]) / 4;
+
     RobotYPosition = (FrontRightPosition[1] +
     FrontLeftPosition[1] +
     BackLeftPosition[1] +
     BackRightPosition[1]) / 4;
+
+    RobotVelocity = (FrontRightPosition[2] +
+    FrontLeftPosition[2] +
+    BackLeftPosition[2] +
+    BackRightPosition[2]) / 4;
+
     FullPosition[0] = RobotXPosition;
     FullPosition[1] = RobotYPosition;
+    FullPosition[2] = RobotVelocity;
+    
     
   }
 
-  public double[] RobotPosition(){
+
+
+  public double[] GetRobotPosition(){
     return(FullPosition);
   }
 

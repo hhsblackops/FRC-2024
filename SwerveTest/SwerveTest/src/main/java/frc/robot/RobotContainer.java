@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.XboxController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class RobotContainer {
     private final DriveSubsystem driveSubsystem = new DriveSubsystem();
@@ -26,7 +28,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand(){
         return new SequentialCommandGroup(
-            new DriveCommand(driveSubsystem, 5, 5, 90)
+            new DriveCommand(driveSubsystem, -5, 5, Math.PI)
         );
 
     }
