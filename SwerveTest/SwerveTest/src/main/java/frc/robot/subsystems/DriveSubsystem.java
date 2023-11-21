@@ -17,10 +17,10 @@ public class DriveSubsystem extends SubsystemBase{
 
 
 
-  public final SwerveModule BackRight = new SwerveModule(7, 8, Math.toRadians(270));
-  public final SwerveModule FrontRight = new SwerveModule(3, 4, Math.toRadians(0));
-  public final SwerveModule BackLeft = new SwerveModule(5, 6, Math.toRadians(180));
-  public final SwerveModule FrontLeft = new SwerveModule(1, 2, Math.toRadians(90));
+  public final SwerveModule BackRight = new SwerveModule(19, 18, Math.toRadians(270));
+  public final SwerveModule FrontRight = new SwerveModule(2, 3, Math.toRadians(0));
+  public final SwerveModule BackLeft = new SwerveModule(17, 16, Math.toRadians(180));
+  public final SwerveModule FrontLeft = new SwerveModule(4, 1, Math.toRadians(90));
   
   AHRS GyroSensor = new AHRS();
 
@@ -40,8 +40,20 @@ public class DriveSubsystem extends SubsystemBase{
     BackLeft.Run(0, Math.toRadians(45));
     FrontLeft.Run(0, Math.toRadians(-45));
   }
-
+  double kP = 0.1;
+  double kF = 0;
   public void Drive(double x1, double y1, double x2){
+    /*SmartDashboard.putNumber("kP", kP);
+    SmartDashboard.putNumber("kF", kF);
+    kP = SmartDashboard.getNumber("kP", kP);
+    kF = SmartDashboard.getNumber("kF", kP);*/
+
+    FrontRight.PIDTuning(kP, kF);
+    FrontLeft.PIDTuning(kP, kF);
+    BackRight.PIDTuning(kP, kF);
+    BackLeft.PIDTuning(kP, kF);
+
+
     double ControllerStarfeX = Math.min(x1, 1);
     double ControllerStrafeY = Math.min(y1, 1);
     double ControllerRotate = Math.min(x2, 1);
@@ -59,25 +71,19 @@ public class DriveSubsystem extends SubsystemBase{
 
 
 
-    /*FrontRight.Run(Math.hypot(PosFullX, NegFullY), Math.atan2(PosFullX, NegFullY));
+    FrontRight.Run(Math.hypot(PosFullX, NegFullY), Math.atan2(PosFullX, NegFullY));
     BackRight.Run(Math.hypot(NegFullX, NegFullY), Math.atan2(NegFullX, NegFullY));
     BackLeft.Run(Math.hypot(NegFullX, PosFullY), Math.atan2(NegFullX, PosFullY));
     FrontLeft.Run(Math.hypot(PosFullX, PosFullY), Math.atan2(PosFullX, PosFullY));
-    */
-    double Direction = Math.toRadians(0);
+    
+    /*double Direction = Math.toRadians(0);
     double Speed = 1;
     FrontRight.Run(Speed, Direction);
     BackRight.Run(Speed, Direction);
     BackLeft.Run(Speed, Direction);
-    FrontLeft.Run(Speed, Direction);
+    FrontLeft.Run(Speed, Direction);*/
 
-    double kP = SmartDashboard.getNumber("kP", 0);
-    double kF = SmartDashboard.getNumber("kF", 0);
 
-    FrontRight.PIDTuning(kP, kF);
-    FrontLeft.PIDTuning(kP, kF);
-    BackRight.PIDTuning(kP, kF);
-    BackLeft.PIDTuning(kP, kF);
     
   }
 

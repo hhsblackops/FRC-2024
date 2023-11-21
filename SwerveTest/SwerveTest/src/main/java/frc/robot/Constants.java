@@ -9,12 +9,12 @@ public final class Constants {
   public static class DriveConstants {
     //This is how fast your robot will go forward and rotate.
     //THESE 2 VALUES COMBINED CAN NOT BE BIGGER THEN 1!!
-    public static final double MaxStrafeSpeed = 1; //feet per second
-    public static final double MaxRotateSpeed = 0.01; //radians per second
+    public static final double MaxStrafeSpeed = 7; //feet per second
+    public static final double MaxRotateSpeed = Math.PI / 10; //radians per second
 
     //The unit of measurement for the next 2 lines doesn't matter, as long as they're both the same.
-    public static final double RobotLength = 24; //inches
-    public static final double RobotWidth = 24.5; //inches
+    public static final double RobotLength = 20; //inches
+    public static final double RobotWidth = 20; //inches
 
     /*if your robot isn't a perfect square, the best angle to turn the robot is not exactly
     every wheel at 45 degrees. This next line calculates it for you.*/
