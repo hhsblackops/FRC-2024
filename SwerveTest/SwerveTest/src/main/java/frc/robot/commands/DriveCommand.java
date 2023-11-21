@@ -41,12 +41,14 @@ public class DriveCommand extends CommandBase{
         double RobotYPosition = RobotPosition[1];
         double DriveMagnitude = Math.abs(DrivePIDController.calculate(Math.hypot((wantedXPosition - RobotXPosition), (wantedYPosition - RobotYPosition))));
         double DriveDirection = Math.atan2((wantedXPosition - RobotXPosition), (wantedYPosition - RobotYPosition));
-        SmartDashboard.putNumber("XPosistion", RobotXPosition);
-        SmartDashboard.putNumber("YPosition", RobotYPosition);
+
         double CurrentAngle = Math.IEEEremainder(Math.toRadians(driveSubsystem.GetGyroDegrees()), 2 * Math.PI);
 
-        SmartDashboard.putNumber("Angle", Math.toDegrees(CurrentAngle));
         driveSubsystem.Drive((DriveMagnitude * Math.sin(DriveDirection)), (DriveMagnitude * Math.cos(DriveDirection)), TurnPIDController.calculate(CurrentAngle));
+        SmartDashboard.putNumber("XPosistion", driveSubsystem.GetRobotPosition()[0]);
+        SmartDashboard.putNumber("YPosition", driveSubsystem.GetRobotPosition()[1]);
+        SmartDashboard.putNumber("Angle", driveSubsystem.GetGyroDegrees());
+        SmartDashboard.putNumber("Velocity", driveSubsystem.GetRobotPosition()[2]);
     }
 
     @Override

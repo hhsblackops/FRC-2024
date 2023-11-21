@@ -5,13 +5,13 @@ import frc.robot.subsystems.LiftSubsystem;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class SlideForward extends CommandBase{
+public class SlideForwardCommand extends CommandBase{
 
 
     private final LiftSubsystem liftSubsystem;
 
 
-    public SlideForward(LiftSubsystem liftSubsystem){
+    public SlideForwardCommand(LiftSubsystem liftSubsystem){
         this.liftSubsystem = liftSubsystem;
 
         addRequirements(liftSubsystem);

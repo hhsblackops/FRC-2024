@@ -49,9 +49,20 @@ public class LiftSubsystem extends SubsystemBase{
     }
 
     public void SlideFoward(){
-        RightSlidePIDController.setReference(5, CANSparkMax.ControlType.kPosition);
-        LeftSlidePIDController.setReference(-5, CANSparkMax.ControlType.kPosition);
+        LeftSlide.set(0.1);
+        RightSlide.set(-0.1);
+
+        //RightSlidePIDController.setReference(5, CANSparkMax.ControlType.kPosition);
+        //LeftSlidePIDController.setReference(-5, CANSparkMax.ControlType.kPosition);
+    }
+    public void SlideBackward(){
+        LeftSlide.set(-0.1);
+        RightSlide.set(0.1);
     }
 
+    public void StopSlide(){
+        LeftSlide.set(0);
+        RightSlide.set(0);
+    }
 
 }
