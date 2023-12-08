@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.modules;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -46,10 +46,7 @@ public class SwerveModule {
         //MovingPIDController.setFF(0);
         MovingPIDController.setOutputRange(-1.0,1.0);
 
-
         MovingSpark.burnFlash();
-
-
 
 
         TurningSpark = new CANSparkMax(TurningID, MotorType.kBrushless);
@@ -62,7 +59,6 @@ public class SwerveModule {
         TurningPIDController.setPositionPIDWrappingEnabled(true);
         TurningPIDController.setPositionPIDWrappingMinInput(0);
         TurningPIDController.setPositionPIDWrappingMinInput(2 * Math.PI);
-
 
 
         TurningPIDController.setP(1);

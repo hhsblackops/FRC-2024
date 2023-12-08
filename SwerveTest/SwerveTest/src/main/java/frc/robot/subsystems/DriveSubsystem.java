@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.modules.SwerveModule;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
@@ -10,21 +11,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;;
 
 
 public class DriveSubsystem extends SubsystemBase{
+ 
+  
+
+  AHRS GyroSensor = new AHRS();
 
   public DriveSubsystem(){
     GyroSensor.calibrate();
   }
 
-
-
-  public final SwerveModule BackRight = new SwerveModule(19, 18, Math.toRadians(270));
-  public final SwerveModule FrontRight = new SwerveModule(2, 3, Math.toRadians(0));
-  public final SwerveModule BackLeft = new SwerveModule(17, 16, Math.toRadians(180));
-  public final SwerveModule FrontLeft = new SwerveModule(4, 1, Math.toRadians(90));
-  
-  AHRS GyroSensor = new AHRS();
-
-
+  public final SwerveModule BackRight = new SwerveModule(DriveConstants.BackRightTurningID, DriveConstants.BackRightDrivingID, Math.toRadians(270));
+  public final SwerveModule FrontRight = new SwerveModule(DriveConstants.FrontRightTurningID, DriveConstants.FrontRightDrivingID, Math.toRadians(0));
+  public final SwerveModule BackLeft = new SwerveModule(DriveConstants.BackLeftTurningID, DriveConstants.BackLeftDrivingID, Math.toRadians(180));
+  public final SwerveModule FrontLeft = new SwerveModule(DriveConstants.FrontLeftTurningID, DriveConstants.FrontLeftDrivingID, Math.toRadians(90));
+ 
 
   public double GetGyroDegrees(){
     return(GyroSensor.getAngle());
@@ -42,6 +42,8 @@ public class DriveSubsystem extends SubsystemBase{
   }
   double kP = 0.1;
   double kF = 0;
+
+  
   public void Drive(double x1, double y1, double x2){
     /*SmartDashboard.putNumber("kP", kP);
     SmartDashboard.putNumber("kF", kF);

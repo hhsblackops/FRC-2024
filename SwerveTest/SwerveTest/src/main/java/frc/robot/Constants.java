@@ -12,17 +12,26 @@ public final class Constants {
     public static final double MaxStrafeSpeed = 7; //feet per second
     public static final double MaxRotateSpeed = Math.PI / 10; //radians per second
 
-    //The unit of measurement for the next 2 lines doesn't matter, as long as they're both the same.
-    public static final double RobotLength = 20; //inches
-    public static final double RobotWidth = 20; //inches
+    //These are all the CAN IDs for the Sparks of the modules.
+    public static final int FrontRightDrivingID = 18;
+    public static final int FrontRightTurningID = 19;
+    public static final int FrontLeftDrivingID = 3;
+    public static final int FrontLeftTurningID = 2;
+    public static final int BackRightDrivingID = 16;
+    public static final int BackRightTurningID = 17;
+    public static final int BackLeftDrivingID = 1;
+    public static final int BackLeftTurningID = 20;
+
+    //next 2 must be measured from the center of the wheels.
+    public static final double RobotLength = 17; //inches front to back
+    public static final double RobotWidth = 17; //inches left to right
 
     /*if your robot isn't a perfect square, the best angle to turn the robot is not exactly
     every wheel at 45 degrees. This next line calculates it for you.*/
     public static final double TurnAngle = Math.atan(RobotWidth/RobotLength);
 
     /* This is the number that will be counted as "rotations" in the driving wheel.
-    We chose this number because it is how many motor rotations will make the robot go foward 
-    approximately 1 foot.*/
+    We chose this number because it is how many motor rotations will make the robot go foward 1 foot.*/
     public static final double PinionTeethNumber = 14;
     public static final double MotorToWheelGearRatio = (45.0 * 22) / (PinionTeethNumber * 15);
     public static final double WheelDiameter = 0.25; //feet
