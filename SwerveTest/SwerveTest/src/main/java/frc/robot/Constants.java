@@ -6,11 +6,21 @@ package frc.robot;
 
 
 public final class Constants {
-  public static class DriveConstants {
+  public static class DriveConstants{
     //This is how fast your robot will go forward and rotate.
     //THESE 2 VALUES COMBINED CAN NOT BE BIGGER THEN 1!!
-    public static final double MaxStrafeSpeed = 7; //feet per second
-    public static final double MaxRotateSpeed = Math.PI / 10; //radians per second
+    public static final double MaxStrafeSpeed = 2; //feet per second
+    public static final double MaxRotateSpeed = Math.PI / 14; //radians per second
+
+    /*These are the values for strafing and rotating to positions when the robot is 
+    driving without the controller.*/
+    public static final double StrafeP = 3;
+    public static final double StrafeI = 0;
+    public static final double StrafeD = 0;
+
+    public static final double RotateP = 4.5;
+    public static final double RotateI = 0;
+    public static final double RotateD = 0;
 
     //These are all the CAN IDs for the Sparks of the modules.
     public static final int FrontRightDrivingID = 18;
@@ -26,6 +36,17 @@ public final class Constants {
     public static final double RobotLength = 17; //inches front to back
     public static final double RobotWidth = 17; //inches left to right
 
+    //These next lines are for the PID values for the wheels.
+    public static final double MovingP = 0.1;
+    public static final double MovingI = 0;
+    public static final double MovingD = 0;
+    public static final double MovingFF = 0.065;
+
+    public static final double TurningP = 1;
+    public static final double TurningI = 0;
+    public static final double TurningD = 0;
+
+
     /*if your robot isn't a perfect square, the best angle to turn the robot is not exactly
     every wheel at 45 degrees. This next line calculates it for you.*/
     public static final double TurnAngle = Math.atan(RobotWidth/RobotLength);
@@ -38,10 +59,22 @@ public final class Constants {
     public static final double DrivingPositionFactor = ((WheelDiameter * Math.PI) / MotorToWheelGearRatio);
 
     public static final double DrivingVelocityFactor = ((WheelDiameter * Math.PI) / MotorToWheelGearRatio) / 60;
+
+    public static final int HorizontalChannelA = 1;
+    public static final int HorizontalChannelB = 2;
+
+    public static final int VerticalChannelA = 3;
+    public static final int VerticalChannelB = 4;
+
   }
 
-
-  public static class AutoConstants {
-
+  public static class LEDConstants{
+    public static final int LEDPort = 8;
+  }
+  public static class AutoConstants{
+    public static final double[] TestPath = {0, 0,
+    1, 1,
+    2, 2
+    };
   }
 }

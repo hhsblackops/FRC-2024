@@ -1,8 +1,5 @@
-package frc.robot.Autos;
+package frc.robot.autos;
 
-import frc.robot.subsystems.DriveSubsystem;
-
-
-public class TestAuto{
-
+public class TestAuto {
+    
 }

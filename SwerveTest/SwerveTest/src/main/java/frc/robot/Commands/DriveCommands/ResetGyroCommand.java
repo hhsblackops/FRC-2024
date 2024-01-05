@@ -1,7 +1,8 @@
-package frc.robot.commands;
+//This command just resets the gyro sensor so it's really easy to do it at the beginning of autonomous.
+package frc.robot.Commands.DriveCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Subsystems.DriveSubsystem;
 
 public class ResetGyroCommand extends CommandBase{
 

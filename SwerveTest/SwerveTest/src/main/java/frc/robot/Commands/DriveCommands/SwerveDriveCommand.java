@@ -1,11 +1,12 @@
-package frc.robot.commands;
+/*This is the command that we call while driving the robot. We just get the values from the controller
+and plug it straight into the Drive function in the DriveSubsystem.*/
+package frc.robot.Commands.DriveCommands;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Subsystems.DriveSubsystem;
 
 
 public class SwerveDriveCommand extends CommandBase{
@@ -28,13 +29,21 @@ public class SwerveDriveCommand extends CommandBase{
         double realTimeLeftX = LeftXFunction.get();
         double realTimeLeftY = LeftYFunction.get();
         double realTimeRightX = RightXFunction.get();
-        SmartDashboard.putNumber("XPosistion", driveSubsystem.GetRobotPosition()[0]);
-        SmartDashboard.putNumber("YPosition", driveSubsystem.GetRobotPosition()[1]);
-        SmartDashboard.putNumber("Angle", driveSubsystem.GetGyroDegrees());
-        SmartDashboard.putNumber("Velocity", driveSubsystem.GetRobotPosition()[2]);
+        double[] RobotPosition = driveSubsystem.GetRobotPosition();
+
+        if(Math.hypot(realTimeLeftX, realTimeLeftY) > 0.5){
+            String print = Double.toString(RobotPosition[0]) + "," + Double.toString(RobotPosition[1]) + "," + Double.toString(Math.atan2(realTimeLeftX, realTimeLeftY)) + ",";
+            System.out.println(print); 
+        }
+        
+
 
 
         driveSubsystem.Drive(realTimeLeftX, realTimeLeftY, realTimeRightX);
 
+    }
+    @Override
+    public void end(boolean interrupted){
+        //System.out.print(Math.toRadians(driveSubsystem.GetGyroDegrees()));
     }
 }
