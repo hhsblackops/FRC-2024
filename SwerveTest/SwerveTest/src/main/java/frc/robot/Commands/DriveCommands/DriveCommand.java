@@ -31,8 +31,8 @@ public class DriveCommand extends CommandBase{
 
     @Override
     public void initialize(){ 
-        driveSubsystem.ResetRobotPosition();
-        driveSubsystem.ResetGyro();
+        //driveSubsystem.ResetRobotPosition();
+        //driveSubsystem.ResetGyro();
 
         StrafePIDController = new PIDController(DriveConstants.StrafeP, DriveConstants.StrafeI, DriveConstants.StrafeD);
         StrafePIDController.setSetpoint(0);
@@ -64,8 +64,7 @@ public class DriveCommand extends CommandBase{
         /*We then break this back down into X and Y components to drive it using the Drive Function.
         We calculate the how much we want to rotate the robot using the PID controller and pluging in
         what direction the robot is currently facing.*/
-        //driveSubsystem.Drive((DriveMagnitude * Math.sin(DriveDirection)), (DriveMagnitude * Math.cos(DriveDirection)), RotatePIDController.calculate(CurrentAngle));
-        driveSubsystem.Drive(0.5, 0.5, 0);
+        driveSubsystem.Drive((DriveMagnitude * Math.sin(DriveDirection)), (DriveMagnitude * Math.cos(DriveDirection)), RotatePIDController.calculate(CurrentAngle));
         SmartDashboard.putNumber("XPosistion", driveSubsystem.GetRobotPosition()[0]);
         SmartDashboard.putNumber("YPosition", driveSubsystem.GetRobotPosition()[1]);
         SmartDashboard.putNumber("Angle", driveSubsystem.GetGyroDegrees());
@@ -80,7 +79,7 @@ public class DriveCommand extends CommandBase{
 
     @Override
     public boolean isFinished(){
-        return((Math.hypot((WantedXPosition - RobotXPosition), (WantedYPosition - RobotYPosition)) < 0.01) && (Math.abs(CurrentAngle - WantedAngle) < 0.01));
+        return((Math.hypot((WantedXPosition - RobotXPosition), (WantedYPosition - RobotYPosition)) < 1)); //&& (Math.abs(CurrentAngle - WantedAngle) < 0.01));
         
     }
 }

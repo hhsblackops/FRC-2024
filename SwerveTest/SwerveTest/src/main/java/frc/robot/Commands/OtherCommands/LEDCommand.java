@@ -1,16 +1,16 @@
 package frc.robot.Commands.OtherCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.LEDSubsystem;
+import frc.robot.Subsystems.SensorSubsystem;
 
 public class LEDCommand extends CommandBase{
 
 
     private final double Color;
-    private final LEDSubsystem ledSubsystem;
+    private final SensorSubsystem ledSubsystem;
 
 
-    public LEDCommand(LEDSubsystem ledSubsystem, double Color){
+    public LEDCommand(SensorSubsystem ledSubsystem, double Color){
         this.Color = Color;
         this.ledSubsystem = ledSubsystem;
     }

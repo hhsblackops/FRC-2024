@@ -10,7 +10,6 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
-import edu.wpi.first.wpilibj.Timer;
 
 
 public class SwerveModule{
@@ -24,9 +23,6 @@ public class SwerveModule{
     private RelativeEncoder MovingEncoder;
     private double SetPosition;
     private double AngleOffset;
-
-    private Timer Timer;
-
 
     public SwerveModule(int TurningID, int MovingID, double Offset){
         /*The 2 different motors in each module is the turning (changes the direction of the wheel)
@@ -83,8 +79,7 @@ public class SwerveModule{
         AngleOffset = Offset;
 
         //create and start the timer for the module, we only really use the timer for the module velocity.
-        Timer = new Timer();
-        Timer.start();
+
     }
 
 
@@ -135,9 +130,8 @@ public class SwerveModule{
     
 
 
-    private double[] ModuleCoords = {0, 0, 0};
+    private double[] ModuleCoords = {0, 0};
     private double PastPosition = 0;
-    private double PastTime = 0;
 
     public double[] ModulePosition(double Gyro){
         /*This function returns the position of the robot in a list.
@@ -148,16 +142,8 @@ public class SwerveModule{
         ModuleCoords[0] += Math.sin(ModuleDirection) * PositionChange;
         ModuleCoords[1] += Math.cos(ModuleDirection) * PositionChange;
 
-        double CurrentTime = Timer.get();
-        double TimeChange = CurrentTime - PastTime;
-        double WheelVelocity = PositionChange / TimeChange;
-        ModuleCoords[2] = Math.abs(WheelVelocity);
-
         PastPosition = CurrentPosition;
-        PastTime = CurrentTime;
         return(ModuleCoords);
-
-
     }
 
     public void ResetModulePosition(){

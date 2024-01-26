@@ -10,6 +10,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.AbsoluteEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
+
 
 
 public class DriveSubsystem extends SubsystemBase{
@@ -25,16 +27,18 @@ public class DriveSubsystem extends SubsystemBase{
   Encoder HorizontalOdometryEncoder = new Encoder(DriveConstants.HorizontalChannelA, DriveConstants.HorizontalChannelB, false, EncodingType.k4X);
   Encoder VerticalOdometryEncoder = new Encoder(DriveConstants.VerticalChannelA, DriveConstants.VerticalChannelB, false, EncodingType.k4X);
 
-  
+  Timer Timer = new Timer();
   
   public DriveSubsystem(){
     GyroSensor.calibrate();
 
+    Timer.start();
+
     HorizontalOdometryEncoder.reset();
-    HorizontalOdometryEncoder.setDistancePerPulse(2 * Math.PI);
+    HorizontalOdometryEncoder.setDistancePerPulse((2 * Math.PI) / (2048 * 12));
 
     VerticalOdometryEncoder.reset();
-    VerticalOdometryEncoder.setDistancePerPulse(2 * Math.PI);
+    VerticalOdometryEncoder.setDistancePerPulse((2 * Math.PI) / (2048 * 12));
     
   }
   
@@ -116,9 +120,9 @@ public class DriveSubsystem extends SubsystemBase{
   
 
   //Set each part of our position to initially start at 0
-  double[] ModulePosition = {0, 0, 0};
+  double[] ModulePosition = {0, 0, 0, 0};
 
-  double[] OdometryPodPosition = {0, 0, 0};
+  double[] OdometryPodPosition = {0, 0, 0, 0};
 
   double CurrentOdometryPodX;
   double CurrentOdometryPodY;
@@ -126,11 +130,18 @@ public class DriveSubsystem extends SubsystemBase{
   double PastOdometryPodX = 0;
   double PastOdometryPodY = 0;
 
+  double PastModuleX = 0;
+  double PastModuleY = 0;
+
+  double PastTime = 0;
+
   @Override
   public void periodic(){
+    double CurrentTime = Timer.get();
     /*This next little chunk gives us the position of the robot based on the relative encoders in the motors.
-    It takes all of the values for x position, y position, and velocity of each module and just takes the
-    average of all of them. The velocity for this is only accurate when the robot is only strafing though.*/
+    It takes all of the values for x position, y position of each module and just takes the
+    average of all of them.*/
+
     double[] FrontRightPosition = FrontRight.ModulePosition(GyroSensor.getAngle());
     double[] FrontLeftPosition = FrontLeft.ModulePosition(GyroSensor.getAngle());
     double[] BackRightPosition = BackRight.ModulePosition(GyroSensor.getAngle());
@@ -146,36 +157,52 @@ public class DriveSubsystem extends SubsystemBase{
     BackLeftPosition[1] +
     BackRightPosition[1]) / 4;
 
-    ModulePosition[2] = (FrontRightPosition[2] +
-    FrontLeftPosition[2] +
-    BackLeftPosition[2] +
-    BackRightPosition[2]) / 4;
 
     /*The rest of the function will calculate position based off the values from the odometry pods.
     If there is no Odometry pods attached to the robot you can just comment this portion out.*/
     double GyroAngle = Math.toRadians(GetGyroDegrees());
 
-    CurrentOdometryPodX = Math.cos(GyroAngle) * VerticalOdometryEncoder.get() 
-    + Math.sin(GyroAngle) * HorizontalOdometryEncoder.get();
-    CurrentOdometryPodY = Math.sin(GyroAngle) * VerticalOdometryEncoder.get() 
-    + Math.cos(GyroAngle) * HorizontalOdometryEncoder.get();
+    CurrentOdometryPodX = Math.cos(GyroAngle) * VerticalOdometryEncoder.getDistance() 
+    + Math.sin(GyroAngle) * HorizontalOdometryEncoder.getDistance();
+    CurrentOdometryPodY = Math.sin(GyroAngle) * VerticalOdometryEncoder.getDistance() 
+    + Math.cos(GyroAngle) * HorizontalOdometryEncoder.getDistance();
     
     OdometryPodPosition[0] += CurrentOdometryPodX - PastOdometryPodX;
     OdometryPodPosition[1] += CurrentOdometryPodY - PastOdometryPodY;
 
-    PastOdometryPodX = CurrentOdometryPodX;
-    PastOdometryPodY = CurrentOdometryPodY;
+    double ModulePositionChange = Math.hypot(ModulePosition[0] - PastModuleX, ModulePosition[1] - PastModuleY);
+    double OdometryPodPositionChange = Math.hypot(CurrentOdometryPodX - PastOdometryPodX, CurrentOdometryPodY - PastOdometryPodY);
+
+    //These next group of lines will get us the velocity of the robot in ft/sec
+    double TimeChange = CurrentTime - PastTime;
+    ModulePosition[2] = ModulePositionChange / TimeChange;
+    OdometryPodPosition[2] = OdometryPodPositionChange / TimeChange;
+    
+    /*These next 2 lines are for how much distance the robot has traveled. This value is key in the 
+    followpath command*/
+    ModulePosition[3] += ModulePositionChange;
+    OdometryPodPosition[3] += OdometryPodPositionChange;
 
     SmartDashboard.putNumber("XPosistion", ModulePosition[0]);
     SmartDashboard.putNumber("YPosition", ModulePosition[1]);
     SmartDashboard.putNumber("Angle", GetGyroDegrees());
     SmartDashboard.putNumber("Velocity", ModulePosition[2]);
+    SmartDashboard.putNumber("Encoder", HorizontalOdometryEncoder.getDistance());
+
+    PastTime = CurrentTime;
+
+    PastModuleX = ModulePosition[0];
+    PastModuleY = ModulePosition[0];
+
+    PastOdometryPodX = CurrentOdometryPodX;
+    PastOdometryPodY = CurrentOdometryPodY;
   }
 
   public double[] GetRobotPosition(){
-    /*returns the position of the robot as {X position, Y position, and velocity}. ModuleFullPosition
-    will return the position of the robot based on the values from the swerve modules. OdometryPodFullPosition
-    will return the position based on the odometry pods. Just comment out which one you don't want to use.*/
+    /*returns the position of the robot as {X position, Y position, velocity, and distanced traveled}. 
+    ModuleFullPosition will return the position of the robot based on the values from the swerve modules. 
+    OdometryPodFullPosition will return the position based on the odometry pods. Just comment out which 
+    one you don't want to use.*/
     return(ModulePosition);
     //return(OdometryPodPosition);
   }

@@ -9,12 +9,12 @@ public final class Constants {
   public static class DriveConstants{
     //This is how fast your robot will go forward and rotate.
     //THESE 2 VALUES COMBINED CAN NOT BE BIGGER THEN 1!!
-    public static final double MaxStrafeSpeed = 2; //feet per second
+    public static final double MaxStrafeSpeed = 5; //feet per second
     public static final double MaxRotateSpeed = Math.PI / 14; //radians per second
 
     /*These are the values for strafing and rotating to positions when the robot is 
     driving without the controller.*/
-    public static final double StrafeP = 3;
+    public static final double StrafeP = 3;  
     public static final double StrafeI = 0;
     public static final double StrafeD = 0;
 
@@ -60,8 +60,8 @@ public final class Constants {
 
     public static final double DrivingVelocityFactor = ((WheelDiameter * Math.PI) / MotorToWheelGearRatio) / 60;
 
-    public static final int HorizontalChannelA = 1;
-    public static final int HorizontalChannelB = 2;
+    public static final int HorizontalChannelA = 0;
+    public static final int HorizontalChannelB = 1;
 
     public static final int VerticalChannelA = 3;
     public static final int VerticalChannelB = 4;

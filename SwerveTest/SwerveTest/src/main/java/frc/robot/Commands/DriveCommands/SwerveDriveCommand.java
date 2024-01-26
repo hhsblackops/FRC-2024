@@ -23,27 +23,23 @@ public class SwerveDriveCommand extends CommandBase{
         addRequirements(driveSubsystem);
     }
 
+    double[] Path = {};
+    @Override
+    public void initialize(){
 
+
+        //PastPosition = driveSubsystem.GetRobotPosition();
+    }
+
+    double[] PastPosition = {0,0};
     @Override
     public void execute(){
         double realTimeLeftX = LeftXFunction.get();
         double realTimeLeftY = LeftYFunction.get();
         double realTimeRightX = RightXFunction.get();
-        double[] RobotPosition = driveSubsystem.GetRobotPosition();
-
-        if(Math.hypot(realTimeLeftX, realTimeLeftY) > 0.5){
-            String print = Double.toString(RobotPosition[0]) + "," + Double.toString(RobotPosition[1]) + "," + Double.toString(Math.atan2(realTimeLeftX, realTimeLeftY)) + ",";
-            System.out.println(print); 
-        }
-        
-
 
 
         driveSubsystem.Drive(realTimeLeftX, realTimeLeftY, realTimeRightX);
+    }
 
-    }
-    @Override
-    public void end(boolean interrupted){
-        //System.out.print(Math.toRadians(driveSubsystem.GetGyroDegrees()));
-    }
 }
