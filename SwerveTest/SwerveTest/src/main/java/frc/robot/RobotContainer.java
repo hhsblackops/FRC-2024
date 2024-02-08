@@ -1,16 +1,14 @@
 package frc.robot;
 
 import frc.robot.Commands.DriveCommands.AvoidObstacleCommand;
-import frc.robot.Commands.DriveCommands.FollowPath2;
 
 import frc.robot.Commands.DriveCommands.DriveCommand;
 import frc.robot.Commands.DriveCommands.SwerveDriveCommand;
 
 import frc.robot.Commands.OtherCommands.LEDCommand;
 
-import frc.robot.Commands.ShooterCommands.ShootNeg;
+import frc.robot.Commands.ShooterCommands.Shoot;
 import frc.robot.Commands.ShooterCommands.ShooterOff;
-import frc.robot.Commands.ShooterCommands.ShootPos;
 
 
 
@@ -34,8 +32,7 @@ public class RobotContainer {
     private final SensorSubsystem ledSubsystem = new SensorSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
-    private final Command shootPos = new ShootPos(shooterSubsystem);
-    private final Command shootNeg = new ShootNeg(shooterSubsystem);
+    private final Command shoot = new Shoot(shooterSubsystem);
     private final Command shooterOff = new ShooterOff(shooterSubsystem);
 
 
@@ -67,8 +64,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBinding(){
-        AButton.onTrue(shootPos);
-        BButton.onTrue(shootNeg);
+        AButton.onTrue(shoot);
         YButton.onTrue(shooterOff);
 
     }

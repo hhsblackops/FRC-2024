@@ -16,40 +16,44 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase{
 
-    CANSparkMax ShooterSpark = new CANSparkMax(14, MotorType.kBrushless);
-    CANSparkMax ShooterSparkTwo = new CANSparkMax(15, MotorType.kBrushless);
+    CANSparkMax ShooterLeft = new CANSparkMax(3, MotorType.kBrushless);
+
+    CANSparkMax ShooterRightFront = new CANSparkMax(1, MotorType.kBrushless);
+    CANSparkMax ShooterRightBack = new CANSparkMax(2, MotorType.kBrushless);
 
     double Power;
     public ShooterSubsystem(){
-        ShooterSpark.restoreFactoryDefaults();
-        ShooterSpark.setIdleMode(IdleMode.kBrake);
-        ShooterSpark.setSmartCurrentLimit(40);
-        ShooterSpark.burnFlash();
+        ShooterRightFront.restoreFactoryDefaults();
+        ShooterRightFront.setIdleMode(IdleMode.kBrake);//IdleMode.kCoast);
+        ShooterRightFront.setSmartCurrentLimit(40);
+        ShooterRightFront.burnFlash();
+        
+        ShooterRightBack.restoreFactoryDefaults();
+        ShooterRightBack.setIdleMode(IdleMode.kBrake);//IdleMode.kCoast);
+        ShooterRightBack.setSmartCurrentLimit(40);
+        ShooterRightBack.burnFlash();
 
-        Power = -1;
-        ShooterSparkTwo.restoreFactoryDefaults();
-        ShooterSparkTwo.setIdleMode(IdleMode.kBrake);
-        ShooterSparkTwo.setSmartCurrentLimit(40);
-        ShooterSparkTwo.burnFlash();
+        ShooterLeft.restoreFactoryDefaults();
+        ShooterLeft.setIdleMode(IdleMode.kBrake);//IdleMode.kCoast);
+        ShooterLeft.setSmartCurrentLimit(20);
+        ShooterLeft.burnFlash();
 
-
+        Power = 0.1;
     }
 
-    public void TurnOnPos(){
-        //This sucks it in as of rn
-        ShooterSpark.set(Power);// * 0.1);
-        ShooterSparkTwo.set(-Power * 0.9);// * 0.1);
-    }
+    public void Shoot(){
+        //ShooterLeft.set(-Power);
 
-    public void TurnOnNeg(){
-        ShooterSpark.set(-Power);
-        ShooterSparkTwo.set(Power * 0.9);
-
+        ShooterRightFront.set(-Power);
+        ShooterRightBack.set(-Power);
     }
 
     public void TurnOff(){
-        ShooterSpark.set(0);
-        ShooterSparkTwo.set(0);
+        //ShooterLeft.disable();
+
+        ShooterRightFront.disable();
+        ShooterRightBack.disable();
+
 
     }
 }

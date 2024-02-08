@@ -3,13 +3,13 @@ package frc.robot.Commands.ShooterCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.ShooterSubsystem;
 
-public class ShootNeg extends CommandBase{
+public class Shoot extends CommandBase{
 
 
     private final ShooterSubsystem shooterSubsystem;
 
 
-    public ShootNeg(ShooterSubsystem shooterSubsystem){
+    public Shoot(ShooterSubsystem shooterSubsystem){
         this.shooterSubsystem = shooterSubsystem;
         addRequirements(shooterSubsystem);
 
@@ -17,7 +17,7 @@ public class ShootNeg extends CommandBase{
 
     @Override
     public void initialize(){  
-        shooterSubsystem.TurnOnNeg();
+        shooterSubsystem.Shoot();
     }
 
 

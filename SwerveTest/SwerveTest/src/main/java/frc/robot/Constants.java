@@ -25,11 +25,11 @@ public final class Constants {
     //These are all the CAN IDs for the Sparks of the modules.
     public static final int FrontRightDrivingID = 18;
     public static final int FrontRightTurningID = 19;
-    public static final int FrontLeftDrivingID = 3;
-    public static final int FrontLeftTurningID = 2;
+    public static final int FrontLeftDrivingID = 7;
+    public static final int FrontLeftTurningID = 6;
     public static final int BackRightDrivingID = 16;
     public static final int BackRightTurningID = 17;
-    public static final int BackLeftDrivingID = 1;
+    public static final int BackLeftDrivingID = 5;
     public static final int BackLeftTurningID = 20;
 
     //next 2 must be measured from the center of the wheels.
