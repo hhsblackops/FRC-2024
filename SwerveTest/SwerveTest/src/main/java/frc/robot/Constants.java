@@ -10,11 +10,11 @@ public final class Constants {
     //This is how fast your robot will go forward and rotate.
     //THESE 2 VALUES COMBINED CAN NOT BE BIGGER THEN 1!!
     public static final double MaxStrafeSpeed = 5; //feet per second
-    public static final double MaxRotateSpeed = Math.PI / 14; //radians per second
+    public static final double MaxRotateSpeed = 1; //radians per second
 
     /*These are the values for strafing and rotating to positions when the robot is 
     driving without the controller.*/
-    public static final double StrafeP = 3;  
+    public static final double StrafeP = 3;
     public static final double StrafeI = 0;
     public static final double StrafeD = 0;
 

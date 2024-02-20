@@ -9,6 +9,13 @@ import frc.robot.Commands.OtherCommands.LEDCommand;
 
 import frc.robot.Commands.ShooterCommands.Shoot;
 import frc.robot.Commands.ShooterCommands.ShooterOff;
+import frc.robot.Commands.ShooterCommands.SetArmPosition;
+import frc.robot.Commands.ShooterCommands.FixNote;
+import frc.robot.Commands.ShooterCommands.Intake;
+import frc.robot.Commands.ArmCommands.MoveArmDown;
+import frc.robot.Commands.ArmCommands.MoveArmUp;
+import frc.robot.Commands.ArmCommands.StopArm;
+
 
 
 
@@ -29,12 +36,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotContainer {
     private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-    private final SensorSubsystem ledSubsystem = new SensorSubsystem();
+    private final SensorSubsystem sensorSubsystem = new SensorSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
     private final Command shoot = new Shoot(shooterSubsystem);
     private final Command shooterOff = new ShooterOff(shooterSubsystem);
-
+    private final Command intake = new Intake(shooterSubsystem, sensorSubsystem);
+    private final Command fixNote = new FixNote(shooterSubsystem);
 
     
  
@@ -53,10 +61,10 @@ public class RobotContainer {
     public RobotContainer(){
         driveSubsystem.setDefaultCommand(
             new SwerveDriveCommand(
-                driveSubsystem,
+                driveSubsystem, shooterSubsystem, sensorSubsystem,
                 () -> (DriveController.getLeftX() * (1 - (0.5 * DriveController.getLeftTriggerAxis()))),
                 () -> (-DriveController.getLeftY() * (1 - (0.5 * DriveController.getLeftTriggerAxis()))),
-                () -> (DriveController.getRightX() * (1 - (0.5 * DriveController.getLeftTriggerAxis())))
+                () -> ((DriveController.getRightX() * 0.5) * (1 - (0.5 * DriveController.getLeftTriggerAxis())))
             )
             
         );
@@ -65,7 +73,16 @@ public class RobotContainer {
 
     private void configureButtonBinding(){
         AButton.onTrue(shoot);
-        YButton.onTrue(shooterOff);
+        XButton.onTrue(new SequentialCommandGroup(intake, fixNote)); 
+        YButton.onTrue(new MoveArmUp(shooterSubsystem));
+        YButton.onFalse(new StopArm(shooterSubsystem));
+        BButton.onTrue(new MoveArmDown(shooterSubsystem));
+        BButton.onFalse(new StopArm(shooterSubsystem));
+
+
+        //YButton.onTrue(new SetArmPosition(shooterSubsystem, 0));
+        //AButton.onTrue(new SetArmPosition(shooterSubsystem, 45));
+
 
     }
     double turn = 0;

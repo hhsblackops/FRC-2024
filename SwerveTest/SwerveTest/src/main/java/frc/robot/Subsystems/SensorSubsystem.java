@@ -4,31 +4,67 @@ import frc.robot.Constants.LEDConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
-import frc.robot.Modules.Limelight;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 
 public class SensorSubsystem extends SubsystemBase{
 
     Spark Blinkin = new Spark(LEDConstants.LEDPort);
-    public final Limelight LimelightCamera = new Limelight("limelight");
+    I2C.Port I2CPort = I2C.Port.kOnboard;
+    ColorSensorV3 ColorSensor = new ColorSensorV3(I2CPort);
+
+    private final NetworkTable LimelightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
+    private final NetworkTableEntry HorizontalOffsetEntry = LimelightTable.getEntry("tx");
+    private final NetworkTableEntry VerticalOffsetEntry = LimelightTable.getEntry("ty");
+    private final NetworkTableEntry AreaEntry = LimelightTable.getEntry("ta");
+
 
     double[] LimelightValues = {0, 0, 0};
 
-    public void SetColor(double Color){
-        Blinkin.set(Color);
+    Color DetectedColor;
+
+
+
+    @Override
+    public void periodic(){
+        DetectedColor = ColorSensor.getColor();
+        SmartDashboard.putNumber("tx", GetHorizontalOffset());
+        SmartDashboard.putNumber("ty", GetVerticalOffset());
+        SmartDashboard.putNumber("ta", GetArea());
+        SmartDashboard.putBoolean("IsVisible", IsTargetVisible());
+
     }
 
-    public boolean GetIsTargetVisible(){
-        return(LimelightCamera.IsTargetVisible());
+    public void SetColor(double LEDColor){
+        Blinkin.set(LEDColor);
     }
 
-    public double[] GetLimelightValues(){
-        /*This function will give you the values of the camera in a list. The values are first the 
-        horizontal offset of the targer, then vertical, and then the area of the target.*/
-        LimelightValues[0] = LimelightCamera.GetHorizontalOffset();
-        LimelightValues[1] = LimelightCamera.GetVerticalOffset();
-        LimelightValues[2] = LimelightCamera.GetArea();
-        return(LimelightValues);
+    public boolean IsTargetVisible(){
+        return(!(AreaEntry.getDouble(0) == 0));
     }
+
+    public double GetHorizontalOffset(){
+        return(HorizontalOffsetEntry.getDouble(0));
+    }
+
+    public double GetVerticalOffset(){
+        return(VerticalOffsetEntry.getDouble(0));
+    }
+
+    public double GetArea(){
+        return(AreaEntry.getDouble(0));
+    }
+
+    public Color GetColor(){
+        return(DetectedColor);
+    }
+
 }
